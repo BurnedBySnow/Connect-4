@@ -9,6 +9,7 @@ public class GameBoard extends JPanel {
     private final Chip[] currentColumn;
     private final JPanel boardPanel;
     private JPanel columnPanel;
+    private Color currentPlayerColor = Color.RED;
 
     private static GameBoard instance;
     int currentPlace = 0;
@@ -78,7 +79,7 @@ public class GameBoard extends JPanel {
         if (currentPlace < 6) {
             currentColumn[currentPlace].setColor(Color.WHITE);
             currentPlace++;
-            currentColumn[currentPlace].setColor(Color.RED);
+            currentColumn[currentPlace].setColor(currentPlayerColor);
             repaint();
             revalidate();
         }
@@ -87,7 +88,7 @@ public class GameBoard extends JPanel {
         if (currentPlace > 0) {
             currentColumn[currentPlace].setColor(Color.WHITE);
             currentPlace--;
-            currentColumn[currentPlace].setColor(Color.RED);
+            currentColumn[currentPlace].setColor(currentPlayerColor);
             repaint();
             revalidate();
         }
@@ -97,7 +98,7 @@ public class GameBoard extends JPanel {
         while (true) {
 
             if (board[i][currentPlace].getColor() == null) {
-                board[i][currentPlace].setColor(Color.RED); //Implement different color for each player
+                board[i][currentPlace].setColor(currentPlayerColor); //Implement different color for each player
                 break;
             }
             else if (i == 0) {
@@ -108,5 +109,7 @@ public class GameBoard extends JPanel {
                 i--;
             }
         }
+        currentPlayerColor = (currentPlayerColor == Color.RED) ? Color.GREEN : Color.RED;
+        currentColumn[currentPlace].setColor(currentPlayerColor);
     }
 }
