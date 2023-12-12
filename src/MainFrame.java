@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements KeyListener {
     JPanel mainPanel = new JPanel(new CardLayout());
     JPanel gameBoard;
     JPanel startPanel;
@@ -23,9 +25,31 @@ public class MainFrame extends JFrame {
         setPanel("GAME_BOARD");
 
         add(mainPanel);
+
+        this.addKeyListener(this);
+
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
 
     public void setPanel(String panel){
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, panel);
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        System.out.println("typed");
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        GameBoard.keySorter(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        System.out.println("released");
+    }
+
+
 }

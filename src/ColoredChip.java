@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ColoredChip extends JLabel implements Chip{
+    Color c;
 
     public ColoredChip() {
         setForeground(Color.WHITE);
@@ -12,5 +13,9 @@ public class ColoredChip extends JLabel implements Chip{
     @Override
     public void setColor(Color color) {
         setForeground(color);
+        c = color;
+    }
+    public Color getColor() {
+        return c;
     }
 }
