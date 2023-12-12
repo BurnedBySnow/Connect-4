@@ -70,7 +70,7 @@ public class GameBoard extends JPanel {
             getInstance().leftKey();
         }
         if (key == KeyEvent.VK_DOWN) {
-                    getInstance().playChip();
+            getInstance().playChip();
         }
     }
 
@@ -83,6 +83,7 @@ public class GameBoard extends JPanel {
             revalidate();
         }
     }
+
     private void leftKey() {
         if (currentPlace > 0) {
             currentColumn[currentPlace].setColor(Color.WHITE);
@@ -92,21 +93,89 @@ public class GameBoard extends JPanel {
             revalidate();
         }
     }
+
     private void playChip() {
         int i = 5;
         while (true) {
 
             if (board[i][currentPlace].getColor() == null) {
                 board[i][currentPlace].setColor(Color.RED); //Implement different color for each player
+                checkWin();
                 break;
-            }
-            else if (i == 0) {
-                System.out.println("The column is already full");
+            } else if (i == 0) {
+                System.out.println("The column is already full.");
                 break;
-            }
-            else {
+            } else {
                 i--;
             }
         }
     }
+
+    private boolean checkWin() {
+        boolean win = false;
+
+        //Horizontal
+        for (int i = 0; i < 6 && !win; i++) {
+            for (int j = 0; j < 4 && !win; j++) {
+                Color c = board[i][j].getColor();
+                for (int k = j + 1; k < j + 4; k++) {
+                    if (board[i][k].getColor() == c && c != null)
+                        win = true;
+                    else {
+                        win = false;
+                        break;
+                    }
+                }
+            }
+        }
+        //Vertical
+        for (int i = 0; i < 7 && !win; i++) {
+            for (int j = 0; j < 3 && !win; j++) {
+                Color c = board[j][i].getColor();
+                for (int k = j + 1; k < j + 4; k++) {
+                    if (board[k][i].getColor() == c && c != null)
+                        win = true;
+                    else {
+                        win = false;
+                        break;
+                    }
+                }
+            }
+        }
+        //Diagonal (\)
+        for (int i = 0; i < 3 && !win; i++) {
+            for (int j = 0; j < 4 && !win; j++) {
+                Color c = board[i][j].getColor();
+                for (int k = 1; k < 4; k++) {
+                    if (board[i + k][j + k].getColor() == c && c != null)
+                        win = true;
+                    else {
+                        win = false;
+                        break;
+                    }
+                }
+            }
+        }
+        //Diagonal (/)
+        for (int i = 0; i < 3 && !win; i++) {
+            for (int j = 3; j < 7 && !win; j++) {
+                Color c = board[i][j].getColor();
+                for (int k = 1; k < 4; k++) {
+                    if (board[i + k][j - k].getColor() == c && c != null)
+                        win = true;
+                    else {
+                        win = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (win)
+            System.out.println("VINNARE!");
+        return win;
+    }
+
+
 }
+
