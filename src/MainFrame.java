@@ -38,7 +38,6 @@ public class MainFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        System.out.println("typed");
     }
 
     @Override
@@ -48,7 +47,6 @@ public class MainFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println("released");
     }
 
 
