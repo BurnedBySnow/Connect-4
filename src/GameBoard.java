@@ -12,6 +12,7 @@ public class GameBoard extends JPanel {
     private JLabel playerTurn;
     private static GameBoard instance;
     int currentPlace = 0;
+    boolean gameFinished = false;
     private GameBoard() {
         setLayout(new BorderLayout());
 
@@ -122,7 +123,7 @@ public class GameBoard extends JPanel {
                 i--;
             }
         }
-        if (!endOFColumn) {
+        if (!endOFColumn && !gameFinished) {
             if (currentPlayerColor == Color.RED) {
                 playerTurn.setText("Player 2's turn");
                 currentPlayerColor = Color.GREEN;
@@ -202,6 +203,7 @@ public class GameBoard extends JPanel {
         } else {
             winner = "Player 2";
         }
-        System.out.println("The winner is " + winner);
+        playerTurn.setText(winner + " won!");
+        gameFinished = true;
     }
 }
