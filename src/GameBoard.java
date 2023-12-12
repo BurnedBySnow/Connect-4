@@ -12,6 +12,7 @@ public class GameBoard extends JPanel {
     private Color currentPlayerColor = Color.RED;
     private static GameBoard instance;
     int currentPlace = 0;
+    boolean playerTurn = true;
 
     private GameBoard() {
         setLayout(new BorderLayout());
@@ -106,11 +107,12 @@ public class GameBoard extends JPanel {
 
             if (board[i][currentPlace].getColor() == null) {
                 board[i][currentPlace].setColor(currentPlayerColor);
-                checkWin();
+                if (checkWin())
+                    showResult(currentPlayerColor);
                 break;
             }
             else if (i == 0) {
-                System.out.println("The column is  full");
+                System.out.println("The column is full");
                 break;
             }
             else {
@@ -120,12 +122,15 @@ public class GameBoard extends JPanel {
         if (!endOFColumn) {
             if (currentPlayerColor == Color.RED) {
                 currentPlayerColor = Color.GREEN;
+                playerTurn = false;
             } else {
                 currentPlayerColor = Color.RED;
+                playerTurn = true;
             }
             currentColumn[currentPlace].setColor(currentPlayerColor);
         }
     }
+
     private boolean checkWin() {
         boolean win = false;
 
@@ -186,8 +191,16 @@ public class GameBoard extends JPanel {
             }
         }
 
-        if (win)
-            System.out.println("VINNARE!");
         return win;
+    }
+    private void showResult(Color currentPlayerColor) {
+        String winner;
+        if (playerTurn)
+            winner = "Player 1";
+        else
+            winner = "player 2";
+
+        System.out.println("The winner is " + winner);
+
     }
 }
