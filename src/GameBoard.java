@@ -13,6 +13,7 @@ public class GameBoard extends JPanel {
     private static GameBoard instance;
     int currentPlace = 0;
     boolean gameFinished = false;
+
     private GameBoard() {
         setLayout(new BorderLayout());
 
@@ -68,18 +69,33 @@ public class GameBoard extends JPanel {
 
     public static void keySorter(KeyEvent e) {
         int key = e.getKeyCode();
+        GameBoard gB = getInstance();
 
 
         if (key == KeyEvent.VK_RIGHT) {
-            getInstance().rightKey();
+            gB.rightKey();
         }
         if (key == KeyEvent.VK_LEFT) {
-            getInstance().leftKey();
+            gB.leftKey();
         }
-        if (key == KeyEvent.VK_DOWN) {
-            getInstance().playChip();
+        if (key == KeyEvent.VK_DOWN && !getInstance().gameFinished) {
+            gB.playChip();
+        }
+        if (key == KeyEvent.VK_ENTER && getInstance().gameFinished) {
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
+                    gB.board[i][j].setColor(null);
+                }
+            }
+            gB.gameFinished = false;
+            gB.currentPlayerColor = Color.RED;
+            gB.playerTurn.setText("Player 1's turn");
+            gB.currentColumn[gB.currentPlace].setColor(gB.currentPlayerColor);
+
+
         }
     }
+
     private void rightKey() {
         if (currentPlace < 6) {
             currentColumn[currentPlace].setColor(Color.WHITE);
@@ -89,6 +105,7 @@ public class GameBoard extends JPanel {
             revalidate();
         }
     }
+
     private void leftKey() {
         if (currentPlace > 0) {
             currentColumn[currentPlace].setColor(Color.WHITE);
@@ -98,6 +115,7 @@ public class GameBoard extends JPanel {
             revalidate();
         }
     }
+
     private void playChip() {
         int i = 5;
         boolean endOFColumn = true;
@@ -114,12 +132,10 @@ public class GameBoard extends JPanel {
                 if (checkWin())
                     showResult(currentPlayerColor);
                 break;
-            }
-            else if (i == 0) {
+            } else if (i == 0) {
                 System.out.println("The column is full");
                 break;
-            }
-            else {
+            } else {
                 i--;
             }
         }
@@ -196,6 +212,7 @@ public class GameBoard extends JPanel {
         }
         return win;
     }
+
     private void showResult(Color currentPlayerColor) {
         String winner;
         if (currentPlayerColor == Color.RED) {
@@ -203,7 +220,7 @@ public class GameBoard extends JPanel {
         } else {
             winner = "Player 2";
         }
-        playerTurn.setText(winner + " won!");
+        playerTurn.setText(winner + " won!\n Press ENTER to play again.");
         gameFinished = true;
     }
 }
