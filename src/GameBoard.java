@@ -10,7 +10,6 @@ public class GameBoard extends JPanel {
     private final JPanel boardPanel;
     private JPanel columnPanel;
     private Color currentPlayerColor = Color.RED;
-
     private static GameBoard instance;
     int currentPlace = 0;
 
@@ -95,21 +94,35 @@ public class GameBoard extends JPanel {
     }
     private void playChip() {
         int i = 5;
+        boolean endOFColumn = true;
+
         while (true) {
+            for (int row = 0; row < 6; row++) {
+                if (board[row][currentPlace].getColor() == null) {
+                    endOFColumn = false;
+                    break;
+                }
+            }
 
             if (board[i][currentPlace].getColor() == null) {
                 board[i][currentPlace].setColor(currentPlayerColor); //Implement different color for each player
                 break;
             }
             else if (i == 0) {
-                System.out.println("The column is already full");
+                System.out.println("The column is  full");
                 break;
             }
             else {
                 i--;
             }
         }
-        currentPlayerColor = (currentPlayerColor == Color.RED) ? Color.GREEN : Color.RED;
-        currentColumn[currentPlace].setColor(currentPlayerColor);
+        if (!endOFColumn) {
+            if (currentPlayerColor == Color.RED) {
+                currentPlayerColor = Color.GREEN;
+            } else {
+                currentPlayerColor = Color.RED;
+            }
+            currentColumn[currentPlace].setColor(currentPlayerColor);
+        }
     }
 }
