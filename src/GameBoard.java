@@ -31,42 +31,6 @@ public class GameBoard extends JPanel {
         this.add(columnPanel, BorderLayout.PAGE_START);
         this.add(boardPanel, BorderLayout.CENTER);
 
-
-//        this.addKeyListener(new KeyListener() {
-//            @Override
-//            public void keyTyped(KeyEvent e) {
-//                System.out.println("typed");
-//            }
-//
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                int key = e.getKeyCode();
-//
-//                if (key == KeyEvent.VK_RIGHT && currentPlace < 6) {
-//                    currentColumn[currentPlace] = null;
-//                    currentPlace++;
-//                    currentColumn[currentPlace].setColor(Color.RED);
-//                }
-//                if (key == KeyEvent.VK_LEFT && currentPlace > 0) {
-//                    currentColumn[currentPlace] = null;
-//                    currentPlace--;
-//                    currentColumn[currentPlace].setColor(Color.RED);
-//                }
-//                if (key == KeyEvent.VK_DOWN) {
-////                    playChip();
-//                }
-//                repaint();
-//                revalidate();
-//            }
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//                System.out.println("released");
-//            }
-//        });
-//
-//        this.setFocusable(true);
-//        this.requestFocusInWindow();
     }
 
     public static GameBoard getInstance() {
@@ -106,7 +70,7 @@ public class GameBoard extends JPanel {
             getInstance().leftKey();
         }
         if (key == KeyEvent.VK_DOWN) {
-//                    playChip();
+                    getInstance().playChip();
         }
     }
 
@@ -119,7 +83,6 @@ public class GameBoard extends JPanel {
             revalidate();
         }
     }
-
     private void leftKey() {
         if (currentPlace > 0) {
             currentColumn[currentPlace].setColor(Color.WHITE);
@@ -127,6 +90,23 @@ public class GameBoard extends JPanel {
             currentColumn[currentPlace].setColor(Color.RED);
             repaint();
             revalidate();
+        }
+    }
+    private void playChip() {
+        int i = 5;
+        while (true) {
+
+            if (board[i][currentPlace].getColor() == null) {
+                board[i][currentPlace].setColor(Color.RED); //Implement different color for each player
+                break;
+            }
+            else if (i == 0) {
+                System.out.println("The column is already full");
+                break;
+            }
+            else {
+                i--;
+            }
         }
     }
 }
