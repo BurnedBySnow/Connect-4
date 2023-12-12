@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class GameBoard extends JPanel {
     private final Chip[][] board;
@@ -10,12 +9,12 @@ public class GameBoard extends JPanel {
     private final JPanel boardPanel;
     private JPanel columnPanel;
     private Color currentPlayerColor = Color.RED;
+    private JLabel playerTurn;
     private static GameBoard instance;
     int currentPlace = 0;
-    boolean playerTurn = true;
-
     private GameBoard() {
         setLayout(new BorderLayout());
+
         columnPanel = new JPanel();
         columnPanel.setLayout(new GridLayout(1, 7));
         columnPanel.setPreferredSize(new Dimension(700, 100));
@@ -31,6 +30,12 @@ public class GameBoard extends JPanel {
 
         this.add(columnPanel, BorderLayout.PAGE_START);
         this.add(boardPanel, BorderLayout.CENTER);
+
+        playerTurn = new JLabel("Player 1's turn");
+        playerTurn.setHorizontalAlignment(SwingConstants.CENTER);
+        playerTurn.setPreferredSize(new Dimension(700, 50));
+        playerTurn.setFont(new Font("Fantasy", Font.BOLD, 20));
+        this.add(playerTurn, BorderLayout.SOUTH);
 
     }
 
@@ -74,7 +79,6 @@ public class GameBoard extends JPanel {
             getInstance().playChip();
         }
     }
-
     private void rightKey() {
         if (currentPlace < 6) {
             currentColumn[currentPlace].setColor(Color.WHITE);
@@ -104,7 +108,6 @@ public class GameBoard extends JPanel {
                     break;
                 }
             }
-
             if (board[i][currentPlace].getColor() == null) {
                 board[i][currentPlace].setColor(currentPlayerColor);
                 if (checkWin())
@@ -121,11 +124,11 @@ public class GameBoard extends JPanel {
         }
         if (!endOFColumn) {
             if (currentPlayerColor == Color.RED) {
+                playerTurn.setText("Player 2's turn");
                 currentPlayerColor = Color.GREEN;
-                playerTurn = false;
             } else {
+                playerTurn.setText("Player 1's turn");
                 currentPlayerColor = Color.RED;
-                playerTurn = true;
             }
             currentColumn[currentPlace].setColor(currentPlayerColor);
         }
@@ -190,17 +193,15 @@ public class GameBoard extends JPanel {
                 }
             }
         }
-
         return win;
     }
     private void showResult(Color currentPlayerColor) {
         String winner;
-        if (playerTurn)
+        if (currentPlayerColor == Color.RED) {
             winner = "Player 1";
-        else
-            winner = "player 2";
-
+        } else {
+            winner = "Player 2";
+        }
         System.out.println("The winner is " + winner);
-
     }
 }
