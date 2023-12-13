@@ -42,7 +42,9 @@ public class MainFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        GameBoard.keySorter(e);
+        GameBoard.getInstance().keySorter(e);
+        gameBoard.revalidate();
+        gameBoard.repaint();
     }
 
     @Override

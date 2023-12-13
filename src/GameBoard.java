@@ -8,7 +8,9 @@ public class GameBoard extends JPanel {
     private final Chip[] currentColumn;
     private final JPanel boardPanel;
     private JPanel columnPanel;
-    private Color currentPlayerColor = Color.RED;
+    private Color currentPlayer = Color.RED;
+    private Color player1Color = Color.RED;
+    private Color player2Color = Color.GREEN;
     private JLabel playerTurn;
     private static GameBoard instance;
     int currentPlace = 0;
@@ -51,7 +53,7 @@ public class GameBoard extends JPanel {
     private void addChips() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
-                board[i][j] = new ColoredChip();
+                board[i][j] = new EmptyChip();
                 ((JLabel) board[i][j]).setHorizontalAlignment(SwingConstants.CENTER);
                 ((JLabel) board[i][j]).setVerticalAlignment(SwingConstants.CENTER);
                 ((JLabel) board[i][j]).setBorder(new LineBorder(Color.black));
@@ -60,14 +62,13 @@ public class GameBoard extends JPanel {
         }
 
         for (int i = 0; i < 7; i++) {
-            currentColumn[i] = new ColoredChip();
+            currentColumn[i] = new EmptyChip();
             columnPanel.add((Component) currentColumn[i]);
         }
-        currentColumn[currentPlace].setColor(Color.RED);
-
+        currentColumn[0].setColor(player1Color);
     }
 
-    public static void keySorter(KeyEvent e) {
+    public void keySorter(KeyEvent e) {
         int key = e.getKeyCode();
         GameBoard gB = getInstance();
 
@@ -84,13 +85,13 @@ public class GameBoard extends JPanel {
         if (key == KeyEvent.VK_ENTER && getInstance().gameFinished) {
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 7; j++) {
-                    gB.board[i][j].setColor(null);
+                    gB.board[i][j].setColor(Color.white);
                 }
             }
             gB.gameFinished = false;
-            gB.currentPlayerColor = Color.RED;
+            gB.currentPlayer = player1Color;
             gB.playerTurn.setText("Player 1's turn");
-            gB.currentColumn[gB.currentPlace].setColor(gB.currentPlayerColor);
+            gB.currentColumn[gB.currentPlace].setColor(player1Color);
 
 
         }
@@ -100,7 +101,7 @@ public class GameBoard extends JPanel {
         if (currentPlace < 6) {
             currentColumn[currentPlace].setColor(Color.WHITE);
             currentPlace++;
-            currentColumn[currentPlace].setColor(currentPlayerColor);
+            currentColumn[currentPlace].setColor(currentPlayer);
             repaint();
             revalidate();
         }
@@ -110,7 +111,7 @@ public class GameBoard extends JPanel {
         if (currentPlace > 0) {
             currentColumn[currentPlace].setColor(Color.WHITE);
             currentPlace--;
-            currentColumn[currentPlace].setColor(currentPlayerColor);
+            currentColumn[currentPlace].setColor(currentPlayer);
             repaint();
             revalidate();
         }
@@ -122,15 +123,15 @@ public class GameBoard extends JPanel {
 
         while (true) {
             for (int row = 0; row < 6; row++) {
-                if (board[row][currentPlace].getColor() == null) {
+                if (board[row][currentPlace].getColor() == Color.WHITE) {
                     endOFColumn = false;
                     break;
                 }
             }
-            if (board[i][currentPlace].getColor() == null) {
-                board[i][currentPlace].setColor(currentPlayerColor);
+            if (board[i][currentPlace].getColor() == Color.WHITE) {
+                board[i][currentPlace].setColor(currentPlayer);
                 if (checkWin())
-                    showResult(currentPlayerColor);
+                    showResult(currentPlayer);
                 break;
             } else if (i == 0) {
                 System.out.println("The column is full");
@@ -140,14 +141,14 @@ public class GameBoard extends JPanel {
             }
         }
         if (!endOFColumn && !gameFinished) {
-            if (currentPlayerColor == Color.RED) {
+            if (currentPlayer == player1Color) {
                 playerTurn.setText("Player 2's turn");
-                currentPlayerColor = Color.GREEN;
+                currentPlayer = player2Color;
             } else {
                 playerTurn.setText("Player 1's turn");
-                currentPlayerColor = Color.RED;
+                currentPlayer = player1Color;
             }
-            currentColumn[currentPlace].setColor(currentPlayerColor);
+            currentColumn[currentPlace].setColor(currentPlayer);
         }
     }
 
@@ -159,7 +160,7 @@ public class GameBoard extends JPanel {
             for (int j = 0; j < 4 && !win; j++) {
                 Color c = board[i][j].getColor();
                 for (int k = j + 1; k < j + 4; k++) {
-                    if (board[i][k].getColor() == c && c != null)
+                    if (board[i][k].getColor() == c && c != null && c != Color.white)
                         win = true;
                     else {
                         win = false;
@@ -173,7 +174,7 @@ public class GameBoard extends JPanel {
             for (int j = 0; j < 3 && !win; j++) {
                 Color c = board[j][i].getColor();
                 for (int k = j + 1; k < j + 4; k++) {
-                    if (board[k][i].getColor() == c && c != null)
+                    if (board[k][i].getColor() == c && c != null && c != Color.white)
                         win = true;
                     else {
                         win = false;
@@ -187,7 +188,7 @@ public class GameBoard extends JPanel {
             for (int j = 0; j < 4 && !win; j++) {
                 Color c = board[i][j].getColor();
                 for (int k = 1; k < 4; k++) {
-                    if (board[i + k][j + k].getColor() == c && c != null)
+                    if (board[i + k][j + k].getColor() == c && c != null && c != Color.white)
                         win = true;
                     else {
                         win = false;
@@ -201,7 +202,7 @@ public class GameBoard extends JPanel {
             for (int j = 3; j < 7 && !win; j++) {
                 Color c = board[i][j].getColor();
                 for (int k = 1; k < 4; k++) {
-                    if (board[i + k][j - k].getColor() == c && c != null)
+                    if (board[i + k][j - k].getColor() == c && c != null && c != Color.white)
                         win = true;
                     else {
                         win = false;

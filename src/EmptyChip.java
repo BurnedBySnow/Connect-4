@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class ColoredChip extends JLabel implements Chip{
-    Color c;
+public class EmptyChip extends JLabel implements Chip{
+    private Color c;
 
-    public ColoredChip() {
+    public EmptyChip() {
+        c = Color.WHITE;
         setForeground(Color.WHITE);
         setFont(new Font("Monsterrat", Font.PLAIN, 113));
         setText("⚫");
