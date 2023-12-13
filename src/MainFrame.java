@@ -22,7 +22,7 @@ public class MainFrame extends JFrame implements KeyListener {
         mainPanel.add(startPanel, "START_PANEL");
         mainPanel.add(gameBoard, "GAME_BOARD");
 
-        setPanel("GAME_BOARD");
+        setPanel("START_PANEL");
 
         add(mainPanel);
 
