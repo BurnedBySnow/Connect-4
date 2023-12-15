@@ -1,14 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class EmptyChip extends JLabel implements Chip{
+public class HeartChip extends JLabel implements Chip{
     private Color c;
 
-    public EmptyChip() {
+    public HeartChip() {
         c = Color.WHITE;
         setForeground(Color.WHITE);
-        setFont(new Font("Monsterrat", Font.PLAIN, 113));
-        setText("⚫");
+        setFont(new Font("Monsterrat", Font.PLAIN, 90));
+        setText("🖤");
     };
 
     @Override
@@ -16,6 +16,7 @@ public class EmptyChip extends JLabel implements Chip{
         setForeground(color);
         c = color;
     }
+    @Override
     public Color getColor() {
         return c;
     }

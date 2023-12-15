@@ -12,11 +12,11 @@ public class GameBoard extends JPanel {
     private Color player1Color = Color.RED;
     private Color player2Color = Color.GREEN;
     private JLabel playerTurn;
-    private static GameBoard instance;
     int currentPlace = 0;
     boolean gameFinished = false;
+    ChipFactory chipFactory = new ChipFactory();
 
-    private GameBoard() {
+     public GameBoard() {
         setLayout(new BorderLayout());
 
         columnPanel = new JPanel();
@@ -30,7 +30,7 @@ public class GameBoard extends JPanel {
         board = new Chip[6][7];
         currentColumn = new Chip[7];
 
-        addChips();
+        addChips(ChipType.ROUND);
 
         this.add(columnPanel, BorderLayout.PAGE_START);
         this.add(boardPanel, BorderLayout.CENTER);
@@ -43,17 +43,13 @@ public class GameBoard extends JPanel {
 
     }
 
-    public static GameBoard getInstance() {
-        if (instance == null) {
-            instance = new GameBoard();
-        }
-        return instance;
-    }
+    public void addChips(ChipType chipType) {
+        boardPanel.removeAll();
+        columnPanel.removeAll();
 
-    private void addChips() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
-                board[i][j] = new EmptyChip();
+                board[i][j] = chipFactory.getChip(chipType);
                 ((JLabel) board[i][j]).setHorizontalAlignment(SwingConstants.CENTER);
                 ((JLabel) board[i][j]).setVerticalAlignment(SwingConstants.CENTER);
                 ((JLabel) board[i][j]).setBorder(new LineBorder(Color.black));
@@ -62,7 +58,7 @@ public class GameBoard extends JPanel {
         }
 
         for (int i = 0; i < 7; i++) {
-            currentColumn[i] = new EmptyChip();
+            currentColumn[i] = chipFactory.getChip(chipType);
             columnPanel.add((Component) currentColumn[i]);
         }
         currentColumn[0].setColor(player1Color);
@@ -70,28 +66,26 @@ public class GameBoard extends JPanel {
 
     public void keySorter(KeyEvent e) {
         int key = e.getKeyCode();
-        GameBoard gB = getInstance();
-
 
         if (key == KeyEvent.VK_RIGHT) {
-            gB.rightKey();
+            rightKey();
         }
         if (key == KeyEvent.VK_LEFT) {
-            gB.leftKey();
+            leftKey();
         }
-        if (key == KeyEvent.VK_DOWN && !getInstance().gameFinished) {
-            gB.playChip();
+        if (key == KeyEvent.VK_DOWN && !gameFinished) {
+            playChip();
         }
-        if (key == KeyEvent.VK_ENTER && getInstance().gameFinished) {
+        if (key == KeyEvent.VK_ENTER && gameFinished) {
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 7; j++) {
-                    gB.board[i][j].setColor(Color.white);
+                    board[i][j].setColor(Color.white);
                 }
             }
-            gB.gameFinished = false;
-            gB.currentPlayer = player1Color;
-            gB.playerTurn.setText("Player 1's turn");
-            gB.currentColumn[gB.currentPlace].setColor(player1Color);
+            gameFinished = false;
+            currentPlayer = player1Color;
+            playerTurn.setText("Player 1's turn");
+            currentColumn[currentPlace].setColor(player1Color);
 
 
         }
@@ -217,9 +211,9 @@ public class GameBoard extends JPanel {
     private void showResult(Color currentPlayerColor) {
         String winner;
         if (currentPlayerColor == Color.RED) {
-            winner = "Player 1";
+            winner = "Red";
         } else {
-            winner = "Player 2";
+            winner = "Green";
         }
         playerTurn.setText(winner + " won!\n Press ENTER to play again.");
         gameFinished = true;
